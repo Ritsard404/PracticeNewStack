@@ -42,7 +42,7 @@ function Create() {
     };
 
     axios
-      .post("http://localhost:5000/add_user", payload)
+      .post("http://localhost:5000/api/student/newStudent", payload)
       .then((res) => {
         navigate("/");
         console.log(res);

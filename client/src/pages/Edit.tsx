@@ -18,7 +18,7 @@ function Edit() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/getStudent/${id}`)
+      .get(`http://localhost:5000/api/student/getStudent/${id}`)
       .then((res) => {
         const studentData = res.data;
         setValues({
@@ -54,7 +54,7 @@ function Edit() {
     };
 
     axios
-      .put(`http://localhost:5000/editStudent/${id}`, payload)
+      .put(`http://localhost:5000/api/student/editStudent/${id}`, payload)
 
       .then(() => navigate("/"))
       .catch((err) => console.log(err));

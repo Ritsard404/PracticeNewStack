@@ -19,7 +19,7 @@ function Home() {
   // Function to fetch students
   const fetchStudents = () => {
     axios
-      .get<Student[]>("http://localhost:5000/students")
+      .get<Student[]>("http://localhost:5000/api/student/students")
       .then((res) => {
         setData(res.data);
       })
@@ -33,7 +33,7 @@ function Home() {
   // Function to handle delete action
   const handleDelete = (id: number) => {
     axios
-      .delete(`http://localhost:5000/deleteStudent/${id}`)
+      .delete(`http://localhost:5000/api/student/deleteStudent/${id}`)
       .then(() => {
         fetchStudents(); // Refresh data after deletion
       })

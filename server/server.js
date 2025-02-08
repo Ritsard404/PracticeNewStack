@@ -1,9 +1,8 @@
+const studentRoute = require("./routes/studentRoutes");
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
 const path = require("path");
-
-const StudentModel = require("./data/studentModel");
 
 const app = express();
 
@@ -20,104 +19,107 @@ const port = 5000;
 //   database: "sampledb",
 // });
 
-// ADD new student
-app.post("/add_user", async (req, res) => {
-  try {
-    // Create a new student record using Sequelize
-    const newStudent = await StudentModel.create({
-      name: req.body.name,
-      email: req.body.email,
-      age: parseInt(req.body.age, 10),
-      gender: req.body.gender,
-      isMale: req.body.isMale,
-      birthdate: new Date(req.body.birthdate),
-    });
+// Routes
+app.use("/api/student", studentRoute);
 
-    return res.json({
-      success: "Student added successfully",
-      student: newStudent,
-    });
-  } catch (error) {
-    console.error("Error inserting student:", error);
-    return res
-      .status(500)
-      .json({ message: "Something unexpected occurred: " + error.message });
-  }
-});
+// // ADD new student
+// app.post("/add_user", async (req, res) => {
+//   try {
+//     // Create a new student record using Sequelize
+//     const newStudent = await StudentModel.create({
+//       name: req.body.name,
+//       email: req.body.email,
+//       age: parseInt(req.body.age, 10),
+//       gender: req.body.gender,
+//       isMale: req.body.isMale,
+//       birthdate: new Date(req.body.birthdate),
+//     });
 
-// GET all students
-app.get("/students", async (req, res) => {
-  try {
-    const allStudents = await StudentModel.findAll();
-    res.json(allStudents);
-  } catch (error) {
-    console.error("Error fetching students:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
+//     return res.json({
+//       success: "Student added successfully",
+//       student: newStudent,
+//     });
+//   } catch (error) {
+//     console.error("Error inserting student:", error);
+//     return res
+//       .status(500)
+//       .json({ message: "Something unexpected occurred: " + error.message });
+//   }
+// });
 
-// GET specific student
-app.get("/getStudent/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
+// // GET all students
+// app.get("/students", async (req, res) => {
+//   try {
+//     const allStudents = await StudentModel.findAll();
+//     res.json(allStudents);
+//   } catch (error) {
+//     console.error("Error fetching students:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
 
-    // Find student by id
-    // const student = await StudentModel.findByPk(id);
-    const student = await StudentModel.findOne({ where: { id } });
+// // GET specific student
+// app.get("/getStudent/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
 
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
+//     // Find student by id
+//     // const student = await StudentModel.findByPk(id);
+//     const student = await StudentModel.findOne({ where: { id } });
 
-    return res.json(student);
-  } catch (error) {
-    console.error("Database error:", error);
-    return res.status(500).json({ message: "Server error" });
-  }
-});
+//     if (!student) {
+//       return res.status(404).json({ message: "Student not found" });
+//     }
 
-// UPDATE student
-app.put("/editStudent/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name, email, age, isMale, birthdate } = req.body;
+//     return res.json(student);
+//   } catch (error) {
+//     console.error("Database error:", error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// });
 
-    // Find the student ID
-    const student = await StudentModel.findByPk(id);
+// // UPDATE student
+// app.put("/editStudent/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { name, email, age, isMale, birthdate } = req.body;
 
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
+//     // Find the student ID
+//     const student = await StudentModel.findByPk(id);
 
-    // UPDATE student details
-    await student.update({ name, email, age, isMale, birthdate });
+//     if (!student) {
+//       return res.status(404).json({ message: "Student not found" });
+//     }
 
-    return res.json({ message: "Student updated successfully", student });
-  } catch (error) {
-    console.error("Database error:", error);
-    return res.status(500).json({ message: "Server error" });
-  }
-});
+//     // UPDATE student details
+//     await student.update({ name, email, age, isMale, birthdate });
 
-// DELETE student
-app.delete("/deleteStudent/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    // Find the student ID
-    const student = await StudentModel.findByPk(id);
+//     return res.json({ message: "Student updated successfully", student });
+//   } catch (error) {
+//     console.error("Database error:", error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// });
 
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
+// // DELETE student
+// app.delete("/deleteStudent/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     // Find the student ID
+//     const student = await StudentModel.findByPk(id);
 
-    // DELETE student details
-    await student.destroy();
-  } catch (error) {
-    console.error("Database error:", error);
-    return res.status(500).json({ message: "Server error" });
-  }
-});
+//     if (!student) {
+//       return res.status(404).json({ message: "Student not found" });
+//     }
 
-app.listen(port, () => {
+//     // DELETE student details
+//     await student.destroy();
+//   } catch (error) {
+//     console.error("Database error:", error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
 });

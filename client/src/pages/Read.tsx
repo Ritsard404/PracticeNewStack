@@ -9,7 +9,7 @@ function Read() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/getStudent/${id}`)
+      .get(`http://localhost:5000/api/student/getStudent/${id}`)
       .then((res) => {
         setStudent(res.data); // Store a single student object
       })
