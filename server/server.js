@@ -1,8 +1,12 @@
 const studentRoute = require("./routes/studentRoutes");
+const authRoute = require("./routes/authRoutes");
+
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
 const path = require("path");
+
+require("./data/index");
 
 const app = express();
 
@@ -21,6 +25,7 @@ const port = 5000;
 
 // Routes
 app.use("/api/student", studentRoute);
+app.use("/api/auth", authRoute);
 
 // // ADD new student
 // app.post("/add_user", async (req, res) => {

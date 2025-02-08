@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // Define Student type
 export interface Student {
@@ -36,6 +37,7 @@ function Home() {
       .delete(`http://localhost:5000/api/student/deleteStudent/${id}`)
       .then(() => {
         fetchStudents(); // Refresh data after deletion
+        toast.error("Deleted");
       })
       .catch((err) => console.error("Error deleting student:", err));
   };

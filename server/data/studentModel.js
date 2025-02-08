@@ -33,7 +33,7 @@ const Student = sequelize.define(
   { tableName: "student", timestamps: false }
 );
 
-// Sync database
-sequelize.sync().then(() => console.log("Database synced"));
+// // Sync database
+// sequelize.sync().then(() => console.log("Database synced student"));
 
 module.exports = Student;
