@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { Student } from "./Home";
+// import { Student } from "./Home";
+import { getStudent } from "../API/StudentAPI";
 
 function Read() {
-  const [student, setStudent] = useState<Student | null>(null);
+  // const [student, setStudent] = useState<Student | null>(null);
   const { id } = useParams();
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/student/getStudent/${id}`)
-      .then((res) => {
-        setStudent(res.data); // Store a single student object
-      })
-      .catch((err) => console.log(err));
-  }, [id]);
+  const student = getStudent(id!);
 
-  if (!student) {
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:5000/api/student/getStudent/${id}`)
+  //     .then((res) => {
+  //       setStudent(res.data); // Store a single student object
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, [id]);
+
+  if (student.isLoading) {
     return <h2>Loading...</h2>; // Handle loading state
   }
 
@@ -29,27 +32,27 @@ function Read() {
       <ul className="list-group">
         <li className="list-group-item">
           <b>ID: </b>
-          {student.id}
+          {student.data?.id}
         </li>
         <li className="list-group-item">
           <b>Name: </b>
-          {student.name}
+          {student.data?.name}
         </li>
         <li className="list-group-item">
           <b>Email: </b>
-          {student.email}
+          {student.data?.email}
         </li>
         <li className="list-group-item">
           <b>Age: </b>
-          {student.age}
+          {student.data?.age}
         </li>
         <li className="list-group-item">
           <b>Gender: </b>
-          {student.isMale ? "Male" : "Female"}
+          {student.data?.isMale ? "Male" : "Female"}
         </li>
         <li className="list-group-item">
           <b>Birth Date: </b>
-          {student.birthdate}
+          {student.data?.birthdate}
         </li>
       </ul>
     </div>

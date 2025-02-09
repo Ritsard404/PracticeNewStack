@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useNewStudent } from "../API/StudentAPI";
 
 function Create() {
   const [values, setValues] = useState({
     name: "",
     email: "",
-    age: "",
-    gender: "",
-    isMale: false,
+    age: 0,
+    gender: "Male",
+    isMale: true,
     birthdate: new Date(),
   });
 
   const [error, setError] = useState("");
+
+  const newStudent = useNewStudent();
 
   // Get today's date in YYYY-MM-DD format for the "max" attribute
   const today = new Date().toISOString().split("T")[0];
@@ -38,18 +41,25 @@ function Create() {
 
     const payload = {
       ...values,
-      birthdate: values.birthdate.toISOString().split("T")[0], // Send as YYYY-MM-DD
+      age: Number(values.age), // ✅ Ensure number
+      birthdate: values.birthdate, // ✅ Already in YYYY-MM-DD format
     };
 
-    axios
-      .post("http://localhost:5000/api/student/newStudent", payload)
-      .then((res) => {
+    // axios
+    //   .post("http://localhost:5000/api/student/newStudent", payload)
+    //   .then((res) => {
+    //     navigate("/");
+    //     console.log(res);
+    //   })
+    //   .catch((err) => console.log(err));
+
+    newStudent.mutateAsync(payload, {
+      onSuccess: () => {
         navigate("/");
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+      },
+    });
   }
-  
+
   return (
     <div className="container">
       <div className="row">
@@ -84,7 +94,9 @@ function Create() {
               type="number"
               name="age"
               required
-              onChange={(e) => setValues({ ...values, age: e.target.value })}
+              onChange={
+                (e) => setValues({ ...values, age: Number(e.target.value) }) // ✅ Ensure number
+              }
             />
           </div>
           <div className="form-group my-3">
@@ -92,18 +104,22 @@ function Create() {
             <input
               type="radio"
               name="gender"
-              value="true"
-              checked={values.isMale === true}
-              onChange={() => setValues({ ...values, isMale: true })}
+              value="Male"
+              checked={values.gender === "Male"}
+              onChange={() =>
+                setValues({ ...values, gender: "Male", isMale: true })
+              } // ✅ Store "Male"
               required
             />{" "}
             Male
             <input
               type="radio"
               name="gender"
-              value="false"
-              checked={values.isMale === false}
-              onChange={() => setValues({ ...values, isMale: false })}
+              value="Female"
+              checked={values.gender === "Female"}
+              onChange={() =>
+                setValues({ ...values, gender: "Female", isMale: false })
+              } // ✅ Store "Female"
               required
             />{" "}
             Female

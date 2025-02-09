@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Student } from "./Home";
+// import { Student } from "./Home";
+import { getStudent, useEditStudent } from "../API/StudentAPI";
+import { toast } from "react-toastify";
 
 function Edit() {
   const { id } = useParams();
@@ -16,21 +18,24 @@ function Edit() {
     birthdate: new Date(),
   });
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/student/getStudent/${id}`)
-      .then((res) => {
-        const studentData = res.data;
-        setValues({
-          name: studentData.name,
-          email: studentData.email,
-          age: studentData.age,
-          isMale: studentData.isMale,
-          birthdate: new Date(studentData.birthdate),
-        });
-      })
-      .catch((err) => console.log(err));
-  }, [id]);
+  const editStudent = useEditStudent(id!);
+  const { data: student, isLoading } = getStudent(id!);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:5000/api/student/getStudent/${id}`)
+  //     .then((res) => {
+  //       const studentData = res.data;
+  //       setValues({
+  //         name: studentData.name,
+  //         email: studentData.email,
+  //         age: studentData.age,
+  //         isMale: studentData.isMale,
+  //         birthdate: new Date(studentData.birthdate),
+  //       });
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, [id]);
 
   const handleBirthdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = new Date(e.target.value);
@@ -53,14 +58,26 @@ function Edit() {
       birthdate: values.birthdate.toISOString().split("T")[0],
     };
 
-    axios
-      .put(`http://localhost:5000/api/student/editStudent/${id}`, payload)
+    editStudent.mutateAsync(payload, {
+      onSuccess: () => {
+        toast.success("Edit successful");
+        navigate("/");
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
 
-      .then(() => navigate("/"))
-      .catch((err) => console.log(err));
+    // axios
+    // .put(`http://localhost:5000/api/student/editStudent/${id}`, payload)
+
+    // .then(() => navigate("/"))
+    // .catch((err) => console.log(err));
   };
 
   const today = new Date().toISOString().split("T")[0];
+
+  if (isLoading) return <>Loading</>;
 
   return (
     <div className="container-fluid vw-100 vh-100 bg-primary">
@@ -75,7 +92,7 @@ function Edit() {
           <input
             type="text"
             name="name"
-            value={values.name}
+            value={student?.name}
             required
             onChange={(e) => setValues({ ...values, name: e.target.value })}
           />
@@ -86,7 +103,7 @@ function Edit() {
           <input
             type="email"
             name="email"
-            value={values.email}
+            value={student?.email}
             required
             onChange={(e) => setValues({ ...values, email: e.target.value })}
           />
@@ -97,7 +114,7 @@ function Edit() {
           <input
             type="number"
             name="age"
-            value={values.age}
+            value={student?.age}
             required
             onChange={(e) => setValues({ ...values, age: e.target.value })}
           />
@@ -108,7 +125,7 @@ function Edit() {
           <input
             type="radio"
             name="gender"
-            checked={values.isMale}
+            checked={student?.isMale}
             onChange={() => setValues({ ...values, isMale: true })}
             required
           />{" "}
@@ -116,7 +133,7 @@ function Edit() {
           <input
             type="radio"
             name="gender"
-            checked={!values.isMale}
+            checked={!student?.isMale}
             onChange={() => setValues({ ...values, isMale: false })}
             required
           />{" "}
@@ -128,7 +145,7 @@ function Edit() {
           <input
             type="date"
             name="birthdate"
-            value={values.birthdate.toISOString().split("T")[0]}
+            value={student?.birthdate.toString().split("T")[0]}
             required
             onChange={handleBirthdateChange}
             max={today}

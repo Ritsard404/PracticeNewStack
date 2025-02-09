@@ -1,3 +1,4 @@
+const { registerUser, login } = require("../services/authService");
 
 // ADD user
 const newUser = async (req, res) => {
@@ -45,7 +46,7 @@ const userLogin = async (req, res) => {
     return res.status(200).json(result);
   } catch (error) {
     console.error("Error logging in user:", error);
-    return res.status(500).json({ message: "Internal server error." });
+    return res.status(500).json({ message: "Internal server error.", error });
   }
 };
 
