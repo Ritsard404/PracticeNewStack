@@ -1,4 +1,5 @@
-const JWT_SECRET = "JAdudfuwefwe(&(&(9889fe93*93jfedc";
+require("dotenv").config();
+const JWT_SECRET = process.env.JWT_SECRET;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -58,13 +59,9 @@ const login = async (email, password) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     console.log("Generated token:", token); // For debugging
 

@@ -1,5 +1,4 @@
 const sequelize = require("./db"); // Import Sequelize instance
-const { DataTypes } = require("sequelize");
 
 // Import models
 const Student = require("./studentModel");
