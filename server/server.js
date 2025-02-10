@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const studentRoute = require("./routes/studentRoutes");
 const authRoute = require("./routes/authRoutes");
 
@@ -14,7 +16,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(express.json());
 
-const port = 5000;
+const port = process.env.PORT;
 
 // const db = mysql.createConnection({
 //   host: "localhost",

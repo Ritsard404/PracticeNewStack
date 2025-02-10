@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 const bcrypt = require("bcryptjs");
