@@ -12,3 +12,14 @@ npm init -y
 npm i express sequelize bcryptjs cors jsonwebtoken dotenv
 npm i -D nodemon
 ```
+
+# VS Code Extension
+
+```sh
+Bootstrap 4
+ES7+ React/Redux/React-Native snippetsMaterial Icon Theme
+Night Owl
+Prettier
+React
+Thunder Client
+```
