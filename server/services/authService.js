@@ -1,5 +1,6 @@
 require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -60,10 +61,17 @@ const login = async (email, password) => {
 
     // Generate JWT token
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1h", // Refresh token lasts 1 hour
     });
 
-    console.log("Generated token:", token); // For debugging
+    // Generate Refresh Token (long-lived)
+    const refreshToken = jwt.sign(
+      { id: user.id, email: user.email },
+      JWT_REFRESH_SECRET,
+      {
+        expiresIn: "7d", // Refresh token lasts 7 days
+      }
+    );
 
     return {
       success: true,
