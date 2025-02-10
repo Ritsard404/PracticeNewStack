@@ -17,7 +17,8 @@ npm i -D nodemon
 
 ```sh
 Bootstrap 4
-ES7+ React/Redux/React-Native snippetsMaterial Icon Theme
+ES7+ React/Redux/React-Native snippets
+Material Icon Theme
 Night Owl
 Prettier
 React
